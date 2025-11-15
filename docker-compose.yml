@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    depends_on:
+      - backend
+      - db
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.20
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    depends_on:
+      - db
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.30
+    environment:
+      - PORT=3000
+      - DB_HOST=172.20.0.40
+      - DB_PORT=5432
+      - DB_USER=appuser
+      - DB_PASS=apppassword
+      - DB_NAME=appdb
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sS", "http://localhost:3000/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: db
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=apppassword
+      - POSTGRES_DB=appdb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.40
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+
+  tester:
+    image: alpine:3.19
+    container_name: tester
+    depends_on:
+      - frontend
+      - backend
+      - db
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.50
+    entrypoint: ["/bin/sh", "-c", "apk add --no-cache openssh-client sshpass curl iputils busybox-extras && sleep 3600"]
+    tty: true
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+volumes:
+  db_data:

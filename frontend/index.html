@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Frontend</title></head>
+<body>
+  <h1>Frontend</h1>
+  <div id="ping">Testing backend...</div>
+  <script>
+    async function test() {
+      try {
+        const res = await fetch('http://backend:3000/api/ping');
+        const j = await res.json();
+        document.getElementById('ping').innerText = 'Backend responded: ' + JSON.stringify(j);
+      } catch (e) {
+        document.getElementById('ping').innerText = 'Backend not reachable: ' + e;
+      }
+    }
+    test();
+  </script>
+</body>
+</html>
