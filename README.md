@@ -1,25 +1,46 @@
 # Team_1
 Containerized Multi-Tier Network Service with Performance Analysis
-# Team_1
-Containerized Multi-Tier Network Service with Performance Analysis
-# use of the project
 
-This project helps to learn how real companies deploy their applications using containers.
+# Three-Tier Dockerized Application
 
-In real industry, almost every company uses:
-Docker for running applications
-Microservices instead of one big application
-Multi-tier architecture (frontend → backend → database)
-Custom networks between containers
-Automation scripts
-Monitoring and performance analysis
+## Overview
 
-# Why do we need to do this project
-To understand how real applications work
-To learn Docker networking
-How containers talk to each other
-how custom subnets work
-How communication flows between services
-How to apply network rules (firewalls, bandwidth limits, etc.)
+This project implements a **three-tier architecture** using Docker containers:
+
+1. **Frontend**: Web server serving static content (Nginx in Alpine).
+2. **Backend**: API service (Node.js) handling application logic.
+3. **Database**: PostgreSQL storing persistent data.
+
+
+## Directory Structure
+
+Team_1/
+├── frontend/          # Frontend Dockerfile and static files
+├── backend/           # Backend Dockerfile and Node.js app
+├── db/                # Database Dockerfile and initialization scripts
+├── deploy_and_test.sh # Automated deployment & test script
+├── docker-compose.yml # Compose file defining multi-tier services
+├── captures/          # Folder to store tcpdump PCAP files
+└── README.md
+
+
+## Prerequisites
+
+* Ubuntu VM / Linux host
+* **Docker** (v20+) & **Docker Compose** (v2+)
+* **Wireshark / tshark** (for network analysis)
+* **Git** (for version control)
+* **VSCode** (for editing Dockerfiles and scripts)
+
+
+Install Docker & Docker Compose on Ubuntu:
+
+sudo apt update
+sudo apt install docker.io docker-compose -y
+sudo systemctl enable --now docker
+
+
+
+
 
 
