@@ -22,7 +22,4 @@ how custom subnets work
 How communication flows between services
 How to apply network rules (firewalls, bandwidth limits, etc.)
 
-# challenges 
-docker installation problem
-sudo apt-get install docker-compose
-sudo apt-get update
+
