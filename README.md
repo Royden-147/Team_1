@@ -1,46 +1,57 @@
 # Team_1
 Containerized Multi-Tier Network Service with Performance Analysis
 
-# Three-Tier Dockerized Application
+This project is a fully containerized 3-tier application consisting of:
 
-## Overview
+* Frontend (Nginx static site)
+* Backend (Node.js API)
+* Database (PostgreSQL)
+* Automated Tester Container
+* Custom Docker network with static IPs
+* Traffic capture (PCAP) using tcpdump
+* Deployment + Testing Automation Script
 
-This project implements a **three-tier architecture** using Docker containers:
+The full stack runs using Docker & Docker Compose, with automated build, deploy, health checks, and network latency testing.
 
-1. **Frontend**: Web server serving static content (Nginx in Alpine).
-2. **Backend**: API service (Node.js) handling application logic.
-3. **Database**: PostgreSQL storing persistent data.
+Project Overview
 
+This project demonstrates:
 
-## Directory Structure
-
-Team_1/
-├── frontend/          # Frontend Dockerfile and static files
-├── backend/           # Backend Dockerfile and Node.js app
-├── db/                # Database Dockerfile and initialization scripts
-├── deploy_and_test.sh # Automated deployment & test script
-├── docker-compose.yml # Compose file defining multi-tier services
-├── captures/          # Folder to store tcpdump PCAP files
-└── README.md
-
-
-## Prerequisites
-
-* Ubuntu VM / Linux host
-* **Docker** (v20+) & **Docker Compose** (v2+)
-* **Wireshark / tshark** (for network analysis)
-* **Git** (for version control)
-* **VSCode** (for editing Dockerfiles and scripts)
+✔ Full-stack microservice architecture
+✔ Custom Docker bridge network (team_1_app_net)
+✔ Static IP allocation for predictable service communication
+✔ Automated deployment using deploy_and_test.sh
+✔ Health checks for all services
+✔ End-to-end connectivity testing using ping from tester container
+✔ Packet capture using tcpdump → saved as .pcap for Wireshark
+✔ Logging, resource monitoring, and capture artifacts stored in /captures
 
 
-Install Docker & Docker Compose on Ubuntu:
+⚙️ Prerequisites
 
-sudo apt update
-sudo apt install docker.io docker-compose -y
-sudo systemctl enable --now docker
+Make sure you have:
 
+Docker
+Docker Compose
+Wireshark (optional, for opening .pcap files)
 
+🧱 Running the Project:
+1. Clone the repo
+2. Run the Deployment Script
+  This script:
+  * Removes old containers/networks
+  * Rebuilds all services
+  * Creates custom Docker network (172.10.0.0/16)
+  * Starts all services  
+  * Waits for health checks
+  * Runs network tests
+  * Captures traffic to .pcap file
 
+📡 Network Testing
 
+The script performs:
 
-
+✔ Ping tests from tester → frontend/backend/db
+✔ Latency measurement
+✔ Network interface detection
+✔ tcpdump capture on Docker bridge
